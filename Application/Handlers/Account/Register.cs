@@ -19,7 +19,7 @@ namespace Application.Handlers.Account
     {
         public class RegisterCommand:IRequest<Result<UserDTO>>
         {
-            public RegisterDTO registerDetails {  get; set; }
+            public RegisterDTO RegisterDetails {  get; set; }
         }
 
         public class RegisterHandler:IRequestHandler<RegisterCommand, Result<UserDTO>>
@@ -37,12 +37,12 @@ namespace Application.Handlers.Account
           {
                 var newUser = new ApplicationUser
                 {
-                    Email = command.registerDetails.Email,
-                    UserName = command.registerDetails.UserName,
+                    Email = command.RegisterDetails.Email,
+                    UserName = command.RegisterDetails.UserName,
                     ImgUrl = null
                 };
 
-               var created = await _userManager.CreateAsync(newUser,command.registerDetails.Password);
+               var created = await _userManager.CreateAsync(newUser,command.RegisterDetails.Password);
 
                if (created != null) 
                {
@@ -57,7 +57,7 @@ namespace Application.Handlers.Account
                     Token = _tokenService.Token(newUser),
                     ImageUrl = null
 
-                }); ; ;
+                }); 
            }
          }
     

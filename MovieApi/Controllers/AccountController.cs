@@ -29,7 +29,7 @@ namespace MovieApi.Controllers
         }
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDetails)
         {
-
+            return HandleResults(await Mediator.Send(new Register.RegisterCommand { RegisterDetails = registerDetails }));
         }
 
 

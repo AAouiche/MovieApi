@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Authentication;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,13 +49,14 @@ namespace MovieApi.Middleware
         {
             if (e is FluentValidation.ValidationException validationException)
             {
-                var errors = validationException.Errors.Select(failure => failure.ErrorMessage).ToList(); // Ensure this line extracts error messages from ValidationException.
+                var errors = validationException.Errors.Select(failure => failure.ErrorMessage).ToList(); 
                 return new ExceptionResponse(
                  StatusCodes.Status400BadRequest,
                  "ValidationError",
                  errors
               );
             }
+            
             else
             {
                 return new ExceptionResponse(

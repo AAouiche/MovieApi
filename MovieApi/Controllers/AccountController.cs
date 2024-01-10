@@ -13,20 +13,24 @@ namespace MovieApi.Controllers
     public class AccountController : BaseApiController
     {
         
-        private readonly TokenService _tokenService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public AccountController( TokenService tokenService)
+        
+        public AccountController( TokenService tokenService, ILogger<BaseApiController> logger) : base(logger)
         {
             
-            _tokenService = tokenService;
+           
             
         }
-
+        [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDetails)
         {
+            try
+            {
+                return HandleResults(await Mediator.Send(new Login.LoginCommand { LoginDetails = loginDetails }));
+            }
+            catch (Exception ex) { throw new Exception("controller", ex); }
             
-            return HandleResults(await Mediator.Send(new Login.LoginCommand { LoginDetails = loginDetails }));
         }
+        [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDetails)
         {
             return HandleResults(await Mediator.Send(new Register.RegisterCommand { RegisterDetails = registerDetails }));

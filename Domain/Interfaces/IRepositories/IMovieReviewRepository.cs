@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.IRepositories
 {
-    public interface IMoveReviewRepository
+    public interface IMovieReviewRepository
     {
-        Task<List<MovieReview>> GetReviews(string userId);
+        Task<IEnumerable<MovieReview>> GetReviews(string movieId);
         Task<MovieReview> GetReview(int reviewId);
         Task CreateReview(MovieReview review);
         Task DeleteReview(int id);
         Task UpdateReview(MovieReview updatedReview);
+        Task<IEnumerable<MovieReview>> GetUserReviews(string userId);
     }
 }

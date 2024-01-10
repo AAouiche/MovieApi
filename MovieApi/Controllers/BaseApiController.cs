@@ -13,7 +13,7 @@ namespace MovieApi.Controllers
 
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
-        public BaseApiController(ILogger<BaseApiController>?logger = null)
+        public BaseApiController(ILogger<BaseApiController>logger )
         {
             _logger = logger;
         }
@@ -32,9 +32,9 @@ namespace MovieApi.Controllers
                 _logger.LogInformation("HandleResults - Successful result");
                 return Ok(result.Value);
             }
-            else if(result.Error == ErrorCode.Unathorized)
+            else if(result.Error == ErrorCode.Unauthorized)
             {
-                _logger.LogWarning("HandleResults - Unauthorized result : {ErrorMessage}", result.Message);
+                _logger.LogWarning("HandleResults - Unauthorized result ", result.Message);
                 return Unauthorized(new {Erro = result.Message});
             }
             return BadRequest(result.Error);

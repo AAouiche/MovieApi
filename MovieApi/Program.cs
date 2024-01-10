@@ -1,6 +1,10 @@
 using Application;
+using Domain.Models;
 using Infrastructure;
+using Infrastructure.AppDbContext;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
+using MovieApi.Middleware;
 
 
 
@@ -8,6 +12,20 @@ using Microsoft.AspNetCore.Diagnostics;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Allow any",
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin();
+                      });
+});
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<MovieContext>()
+            .AddDefaultTokenProviders();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -28,13 +46,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRouting();
 
-app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

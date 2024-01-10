@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Domain.Interfaces.IRepositories;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 
 namespace Application
 {
@@ -23,8 +24,9 @@ namespace Application
                options.UseSqlServer(
                   configuration.GetConnectionString("MovieConnectionString"),
                   x => x.MigrationsAssembly("Infrastructure")));
+            services.AddScoped<TokenService>();
             services.AddValidatorsFromAssembly(assembly);
-            services.AddScoped<IMoveReviewRepository, MovieReviewRepository>();
+            services.AddScoped<IMovieReviewRepository, MovieReviewRepository>();
             return services;
         }
     }

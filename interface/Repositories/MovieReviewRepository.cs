@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class MovieReviewRepository:IMoveReviewRepository
+    public class MovieReviewRepository:IMovieReviewRepository
     {
         private readonly MovieContext _movieContext;
 
@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             _movieContext = movieContext;
         }
 
-        public async Task<List<MovieReview>> GetReviews(string userId)
+        public async Task<IEnumerable<MovieReview>> GetUserReviews(string userId)
         {
             
                 return await _movieContext
@@ -27,6 +27,15 @@ namespace Infrastructure.Repositories
                     .Where(x => x.UserId == userId)
                     .ToListAsync();
      
+        }
+        public async Task<IEnumerable<MovieReview>> GetReviews(string movieId)
+        {
+
+            return await _movieContext
+                .movieReviews
+                .Where(x => x.MovieId == movieId)
+                .ToListAsync();
+
         }
         public async Task<MovieReview> GetReview(int reviewId)
         {

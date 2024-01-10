@@ -19,7 +19,7 @@ namespace Application.Utility
     public enum ErrorCode 
     {
        GeneralError,
-       Unathorized,
+       Unauthorized,
        None
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class AccountRepository : IAccountRepository
+    public class AccountRepository 
     {
         private readonly UserManager<ApplicationUser> _userManager;
 

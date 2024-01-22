@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,7 @@ namespace   Domain.DTO
         public string Token { get; set; }
         public string? ImageUrl { get; set; }
         public string UserName { get; set; }
+        public ICollection<MovieReview>? Reviews { get; set; }
+        public ICollection<Movie>? WatchedMovies { get; set; }
     }
 }

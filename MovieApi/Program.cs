@@ -15,11 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "Allow any",
-                      policy =>
-                      {
-                          policy.AllowAnyOrigin();
-                      });
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+               
+    });
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -47,6 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseRouting();
+app.UseCors();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

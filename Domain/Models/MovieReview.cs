@@ -15,6 +15,7 @@ namespace Domain.Models
         public int Rating { get; set; }
         public DateTime ReviewDate { get; set; }
 
-        public ApplicationUser User { get; set; } 
+        public ApplicationUser User { get; set; }
+        public Movie Movie { get; set; }
     }
 }

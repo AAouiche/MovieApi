@@ -18,6 +18,7 @@ namespace Application.Handlers.Review
         public class CreateCommand : IRequest<Result<Unit>>
         {
             public MovieReview review {  get; set; }
+            public Movie movie { get; set; }
         }
         public class CreateCommandValidator : AbstractValidator<CreateCommand>
         {
@@ -31,18 +32,32 @@ namespace Application.Handlers.Review
         public class CreateHandler : IRequestHandler<CreateCommand, Result<Unit>>
         {
             private readonly IMovieReviewRepository _movieReviewRepository;
-            public CreateHandler(IMovieReviewRepository movieReviewRepository)
+            private readonly IMovieRepository _movieRepository;
+
+            public CreateHandler(IMovieReviewRepository movieReviewRepository, IMovieRepository movieRepository)
             {
-               _movieReviewRepository = movieReviewRepository;
+                _movieReviewRepository = movieReviewRepository;
+                _movieRepository = movieRepository;
             }
 
-            public async Task<Result<Unit>> Handle(CreateCommand command,CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(CreateCommand command, CancellationToken cancellationToken)
             {
-                var newReview = command.review;
+               
+                var movie = await _movieRepository.GetOrCreateMovie(command.movie);
+
                 
-                 await _movieReviewRepository.CreateReview(newReview);
+                var newReview = new MovieReview
+                {
 
+                    UserId = command.review.UserId, 
+                    MovieId = movie.MovieId, 
+                    Content = command.review.Content,
+                    Rating = command.review.Rating,
+                    ReviewDate = DateTime.UtcNow,
+                };
 
+                
+                await _movieReviewRepository.CreateReview(newReview);
 
                 return Result<Unit>.SuccessResult(Unit.Value);
             }

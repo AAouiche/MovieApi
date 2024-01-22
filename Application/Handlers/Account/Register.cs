@@ -22,19 +22,33 @@ namespace Application.Handlers.Account
             public RegisterDTO RegisterDetails {  get; set; }
         }
 
-        public class RegisterHandler:IRequestHandler<RegisterCommand, Result<UserDTO>>
+        public class RegisterHandler : IRequestHandler<RegisterCommand, Result<UserDTO>>
         {
             private readonly UserManager<ApplicationUser> _userManager;
             private readonly ILogger<RegisterCommand> _logger;
             private readonly TokenService _tokenService;
-          public RegisterHandler(UserManager<ApplicationUser> userManager,ILogger<RegisterCommand> logger,TokenService tokenService)
-           {
+            public RegisterHandler(UserManager<ApplicationUser> userManager, ILogger<RegisterCommand> logger, TokenService tokenService)
+            {
                 _userManager = userManager;
                 _logger = logger;
                 _tokenService = tokenService;
-           }
-         public async Task<Result<UserDTO>> Handle(RegisterCommand command,CancellationToken cancellationToken)
-          {
+            }
+            public async Task<Result<UserDTO>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+            {
+               
+                var existingUserByEmail = await _userManager.FindByEmailAsync(command.RegisterDetails.Email);
+                if (existingUserByEmail != null)
+                {
+                    return Result<UserDTO>.Failure("Email already in use", ErrorCode.BadRequest);
+                }
+
+               
+                var existingUserByUsername = await _userManager.FindByNameAsync(command.RegisterDetails.UserName);
+                if (existingUserByUsername != null)
+                {
+                    return Result<UserDTO>.Failure("Username already in use", ErrorCode.BadRequest);
+                }
+
                 var newUser = new ApplicationUser
                 {
                     Email = command.RegisterDetails.Email,
@@ -42,27 +56,26 @@ namespace Application.Handlers.Account
                     ImgUrl = null
                 };
 
-               var created = await _userManager.CreateAsync(newUser,command.RegisterDetails.Password);
+                var created = await _userManager.CreateAsync(newUser, command.RegisterDetails.Password);
 
-               if (created != null) 
-               {
+                if (!created.Succeeded)
+                {
                     _logger.LogWarning("Error creating user: {Errors}", created.Errors);
                     return Result<UserDTO>.Failure("Error Creating New User", ErrorCode.GeneralError);
-               }
+                }
 
-                return Result<UserDTO>.SuccessResult(new UserDTO
+                var userDTO = new UserDTO
                 {
                     Email = newUser.Email,
                     UserName = newUser.UserName,
                     Token = _tokenService.Token(newUser),
                     ImageUrl = null
+                };
+                return Result<UserDTO>.SuccessResult( userDTO);
+            }
 
-                }); 
-           }
-         }
-    
-     
+        }
 
-    }
+        }
     
 }

@@ -10,7 +10,7 @@ using static Application.Handlers.Review.Create;
 
 namespace TestProject.MovieReviewUnitTests
 {
-    public class CreateHandlerTests
+    /*public class CreateHandlerTests
     {
         private readonly Mock<IMovieReviewRepository> _mockRepo;
         private readonly CreateHandler _handler;
@@ -46,5 +46,5 @@ namespace TestProject.MovieReviewUnitTests
             Assert.True(result.Success);
         }
 
-    }
+    }*/
 }

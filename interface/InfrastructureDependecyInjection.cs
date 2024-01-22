@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Domain.Interfaces.IRepositories;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Infrastructure.Security;
+using Domain.Interfaces.Security;
 
 namespace Application
 {
@@ -27,6 +29,8 @@ namespace Application
             services.AddScoped<TokenService>();
             services.AddValidatorsFromAssembly(assembly);
             services.AddScoped<IMovieReviewRepository, MovieReviewRepository>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IAccessUser, AccessUser>();
             return services;
         }
     }

@@ -35,9 +35,9 @@ namespace MovieApi.Controllers
             else if(result.Error == ErrorCode.Unauthorized)
             {
                 _logger.LogWarning("HandleResults - Unauthorized result ", result.Message);
-                return Unauthorized(new {Erro = result.Message});
+                return Unauthorized(new {Error = result.Message});
             }
-            return BadRequest(result.Error);
+            return BadRequest(new { Error = result.Message });
 
 
         }

@@ -18,6 +18,7 @@ namespace Application.Utility
     }
     public enum ErrorCode 
     {
+       BadRequest,
        GeneralError,
        Unauthorized,
        None

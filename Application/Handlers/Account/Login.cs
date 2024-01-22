@@ -35,8 +35,7 @@ namespace Application.Handlers.Account
             }
             public async Task<Result<UserDTO>> Handle(LoginCommand command,CancellationToken cancellationToken)
             {
-                try
-                {
+                
                     var user = await _userManager.FindByEmailAsync(command.LoginDetails.Email);
                     if (user == null)
                     {
@@ -58,11 +57,7 @@ namespace Application.Handlers.Account
 
 
                     return Result<UserDTO>.SuccessResult(loggedInUser);
-                }
-                catch(Exception ex)
-                {
-                    throw new Exception("fgd",ex);
-                }
+                
                
                 
                

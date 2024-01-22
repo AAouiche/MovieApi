@@ -1,4 +1,5 @@
-﻿using Application.Handlers.Review;
+﻿using Application.Handlers.Account;
+using Application.Handlers.Review;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace MovieApi.Controllers
         {
             var query = new List.ListQuery { movieReviewId = movieId };
             var result = await Mediator.Send(query);
-            return Ok(result); 
+            return HandleResults(result); 
         }
 
         
@@ -32,27 +33,41 @@ namespace MovieApi.Controllers
         {
             var command = new Create.CreateCommand { review = review };
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return HandleResults(result);
         }
 
         
-        [HttpPut]
+        [HttpPut("updateReview")]
         public async Task<IActionResult> UpdateReview([FromBody] MovieReview review)
         {
             var command = new UpdateCommand { MovieReview = review };
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return HandleResults(result);
         }
 
         
-        [HttpDelete("{reviewId}")]
+        [HttpDelete("deleteReview/{reviewId}")]
         public async Task<IActionResult> DeleteReview(int reviewId)
         {
             var command = new DeleteCommand { ReviewId = reviewId };
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return HandleResults(result);
         }
+        [HttpGet("listWatchedMovies")]
+        public async Task<IActionResult> ListWatchedMovies()
+        {
+            var query = new ListWatchedMovie.ListWatchedMoviesQuery();
+            var result = await Mediator.Send(query);
 
-       
+            return HandleResults(result);
+        }
+        [HttpDelete("deleteWatchedMovie/{movieId}")]
+        public async Task<IActionResult> DeleteWatchedMovie(string movieId)
+        {
+            var command = new DeleteWatchedMovie.DeleteWatchedMovieCommand { MovieId = movieId };
+            var result = await Mediator.Send(command);
+
+            return HandleResults(result);
+        }
     }
 }

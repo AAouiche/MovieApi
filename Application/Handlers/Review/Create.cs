@@ -50,7 +50,7 @@ namespace Application.Handlers.Review
                 {
 
                     UserId = command.review.UserId, 
-                    MovieId = movie.MovieId, 
+                    imdbId = movie.imdbID, 
                     Content = command.review.Content,
                     Rating = command.review.Rating,
                     ReviewDate = DateTime.UtcNow,

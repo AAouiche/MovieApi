@@ -31,6 +31,7 @@ namespace Application.Handlers.Account
                 {
                     return Result<Unit>.Failure("Movie is null", ErrorCode.BadRequest);
                 }
+
                 await _movieRepository.AddWatched(request.Movie);
 
                 return Result<Unit>.SuccessResult(Unit.Value);

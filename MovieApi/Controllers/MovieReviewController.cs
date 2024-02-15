@@ -19,10 +19,10 @@ namespace MovieApi.Controllers
         }
 
         
-        [HttpGet("getReviews/{movieId}")]
-        public async Task<IActionResult> GetReviews(string movieId)
+        [HttpGet("getReviews/{imdbID}")]
+        public async Task<IActionResult> GetReviews(string MovieId)
         {
-            var query = new List.ListQuery { movieReviewId = movieId };
+            var query = new List.ListQuery { movieReviewId = MovieId };
             var result = await Mediator.Send(query);
             return HandleResults(result); 
         }
@@ -61,10 +61,10 @@ namespace MovieApi.Controllers
 
             return HandleResults(result);
         }
-        [HttpDelete("deleteWatchedMovie/{movieId}")]
-        public async Task<IActionResult> DeleteWatchedMovie(string movieId)
+        [HttpDelete("deleteWatchedMovie/{imdbID}")]
+        public async Task<IActionResult> DeleteWatchedMovie(string MovieId)
         {
-            var command = new DeleteWatchedMovie.DeleteWatchedMovieCommand { MovieId = movieId };
+            var command = new DeleteWatchedMovie.DeleteWatchedMovieCommand { MovieId = MovieId };
             var result = await Mediator.Send(command);
 
             return HandleResults(result);

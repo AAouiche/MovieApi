@@ -34,11 +34,14 @@ namespace Infrastructure.AppDbContext
             modelBuilder.Entity<Movie>()
            .HasMany(m => m.Reviews)
            .WithOne(r => r.Movie)
-           .HasForeignKey(r => r.MovieId);
+           .HasForeignKey(r => r.imdbId);
+            modelBuilder.Entity<Movie>()
+            .HasKey(m => m.imdbID);
 
-            
+
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Reviews)
+
                 .WithOne(r => r.User)
                 .HasForeignKey(r => r.UserId);
         }

@@ -29,7 +29,7 @@ namespace TestProject.MovieReviewUnitTests
             {
                 ReviewId = 1, 
                 UserId = "user123",
-                MovieId = "movie456",
+                imdbID = "movie456",
                 Content = "Great movie, really enjoyed it!",
                 Rating = 5,
                 ReviewDate = DateTime.UtcNow,

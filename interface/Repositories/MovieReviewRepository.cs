@@ -28,12 +28,12 @@ namespace Infrastructure.Repositories
                     .ToListAsync();
      
         }
-        public async Task<IEnumerable<MovieReview>> GetReviews(string movieId)
+        public async Task<IEnumerable<MovieReview>> GetReviews(string MovieId)
         {
 
             return await _movieContext
                 .movieReviews
-                .Where(x => x.MovieId == movieId)
+                .Where(x => x.imdbId == MovieId)
                 .ToListAsync();
 
         }

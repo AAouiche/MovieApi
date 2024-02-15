@@ -4,6 +4,7 @@ using Infrastructure.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20240212232656_MovieAttributes")]
+    partial class MovieAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,12 +30,12 @@ namespace Infrastructure.Migrations
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("WatchedMoviesimdbID")
+                    b.Property<string>("WatchedMoviesimdbId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UsersId", "WatchedMoviesimdbID");
+                    b.HasKey("UsersId", "WatchedMoviesimdbId");
 
-                    b.HasIndex("WatchedMoviesimdbID");
+                    b.HasIndex("WatchedMoviesimdbId");
 
                     b.ToTable("ApplicationUserMovie");
                 });
@@ -336,7 +339,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("WatchedMoviesimdbID")
+                        .HasForeignKey("WatchedMoviesimdbId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

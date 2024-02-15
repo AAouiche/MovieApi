@@ -1,8 +1,10 @@
 ﻿using Application.Utility;
+using Domain.DTO;
 using Domain.Interfaces.IRepositories;
 using Domain.Interfaces.Security;
 using Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +15,12 @@ namespace Application.Handlers.Account
 {
     public class ListWatchedMovie
     {
-        public class ListWatchedMoviesQuery : IRequest<Result<List<Movie>>>
+        public class ListWatchedMoviesQuery : IRequest<Result<List<MovieDTO>>>
         {
 
         }
 
-        public class Handler : IRequestHandler<ListWatchedMoviesQuery, Result<List<Movie>>>
+        public class Handler : IRequestHandler<ListWatchedMoviesQuery, Result<List<MovieDTO>>>
         {
             private readonly IMovieRepository _movieRepository;
             private readonly IAccessUser _accessUser;
@@ -28,25 +30,35 @@ namespace Application.Handlers.Account
                 _accessUser = accessUser;
             }
 
-            public async Task<Result<List<Movie>>> Handle(ListWatchedMoviesQuery request, CancellationToken cancellationToken)
+            public async Task<Result<List<MovieDTO>>> Handle(ListWatchedMoviesQuery request, CancellationToken cancellationToken)
             {
                 if (request == null)
                 {
-                    return Result<List<Movie>>.Failure("Null request", ErrorCode.BadRequest);
+                    return Result<List<MovieDTO>>.Failure("Null request", ErrorCode.BadRequest);
                 }
-                var currentUser = await _accessUser.GetUser();
-                var watchedMovie = currentUser.WatchedMovies.Select(m => new Movie
+
+                var watchedMovies = await _movieRepository.ListWatchedMoviesForUser();
+
+                
+                var movieDtos = watchedMovies.Select(m => new MovieDTO
                 {
-                    MovieId = m.MovieId,
+                    imdbID = m.imdbID,
                     Title = m.Title,
                     ReleaseDate = m.ReleaseDate,
-                    Genre = m.Genre,        
-                    Director = m.Director,     
-                    Description = m.Description 
-                                                
+                    Genre = m.Genre,
+                    Director = m.Director,
+                    Plot = m.Plot,
+                    Year = m.Year,           
+                    Poster = m.Poster,       
+                    Runtime = m.Runtime,      
+                    Actors = m.Actors,         
+                    Released = m.Released,     
+                    imdbRating = m.imdbRating
+
+
                 }).ToList();
 
-                return Result<List<Movie>>.SuccessResult(watchedMovie);
+                return Result<List<MovieDTO>>.SuccessResult(movieDtos);
             }
         }
     }

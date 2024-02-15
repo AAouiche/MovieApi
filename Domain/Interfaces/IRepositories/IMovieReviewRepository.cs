@@ -10,7 +10,7 @@ namespace Domain.Interfaces.IRepositories
 {
     public interface IMovieReviewRepository
     {
-        Task<IEnumerable<MovieReview>> GetReviews(string movieId);
+        Task<IEnumerable<MovieReview>> GetReviews(string MovieId);
         Task<MovieReview> GetReview(int reviewId);
         Task CreateReview(MovieReview review);
         Task DeleteReview(int id);

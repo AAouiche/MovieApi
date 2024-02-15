@@ -13,6 +13,8 @@ using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Infrastructure.Security;
 using Domain.Interfaces.Security;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Application
 {
@@ -31,6 +33,8 @@ namespace Application
             services.AddScoped<IMovieReviewRepository, MovieReviewRepository>();
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IAccessUser, AccessUser>();
+
+            
             return services;
         }
     }

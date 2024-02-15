@@ -16,7 +16,7 @@ namespace Application.Validators
             RuleFor(x => x.UserId).NotEmpty().WithMessage("User ID is required.");
 
             
-            RuleFor(x => x.MovieId).NotEmpty().WithMessage("Movie ID is required.");
+            RuleFor(x => x.imdbId).NotEmpty().WithMessage("Movie ID is required.");
 
             
             RuleFor(x => x.Content).NotEmpty().WithMessage("Review content is required.")

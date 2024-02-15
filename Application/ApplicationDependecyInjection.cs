@@ -1,4 +1,5 @@
 ﻿using Application.Behaviours;
+using Application.Mapper;
 using Domain.Models;
 using FluentValidation;
 using MediatR;
@@ -21,8 +22,8 @@ namespace Application
                 configuration.RegisterServicesFromAssembly(assembly));
 
             services.AddValidatorsFromAssembly(assembly);
+            services.AddAutoMapper(typeof(UserProfile));
 
-            
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             return services;

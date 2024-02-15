@@ -12,18 +12,33 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20240120151605_upToDate")]
-    partial class upToDate
+    [Migration("20240212140631_userMovieMany")]
+    partial class userMovieMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ApplicationUserMovie", b =>
+                {
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("WatchedMoviesimdbId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UsersId", "WatchedMoviesimdbId");
+
+                    b.HasIndex("WatchedMoviesimdbId");
+
+                    b.ToTable("ApplicationUserMovie");
+                });
 
             modelBuilder.Entity("Domain.Models.ApplicationUser", b =>
                 {
@@ -95,21 +110,18 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Movie", b =>
                 {
-                    b.Property<string>("MovieId")
+                    b.Property<string>("imdbID")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Director")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Plot")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -120,9 +132,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MovieId");
-
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("imdbID");
 
                     b.ToTable("Movies");
                 });
@@ -139,10 +149,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MovieId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
@@ -153,11 +159,15 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("imdbID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("MovieId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("imdbID");
 
                     b.ToTable("movieReviews");
                 });
@@ -295,24 +305,32 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.Movie", b =>
+            modelBuilder.Entity("ApplicationUserMovie", b =>
                 {
                     b.HasOne("Domain.Models.ApplicationUser", null)
-                        .WithMany("WatchedMovies")
-                        .HasForeignKey("ApplicationUserId");
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("WatchedMoviesimdbId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.MovieReview", b =>
                 {
-                    b.HasOne("Domain.Models.Movie", "Movie")
-                        .WithMany("Reviews")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Models.ApplicationUser", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Movie", "Movie")
+                        .WithMany("Reviews")
+                        .HasForeignKey("imdbID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -375,8 +393,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Reviews");
-
-                    b.Navigation("WatchedMovies");
                 });
 
             modelBuilder.Entity("Domain.Models.Movie", b =>

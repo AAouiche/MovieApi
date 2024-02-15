@@ -1,6 +1,8 @@
 ﻿using Domain.Interfaces.Security;
 using Domain.Models;
 using Infrastructure.AppDbContext;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -43,6 +45,7 @@ namespace Infrastructure.Security
 
             throw new InvalidOperationException("Username not found in claims");
         }
+        
         public async Task<ApplicationUser> GetUser()
         {
             var userIdString = _HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);

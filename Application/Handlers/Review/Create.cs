@@ -1,7 +1,9 @@
 ﻿using Application.Utility;
 using Application.Validators;
 using Domain.Interfaces.IRepositories;
+using Domain.Interfaces.Security;
 using Domain.Models;
+using Domain.Return.DTO;
 using FluentValidation;
 using MediatR;
 using System;
@@ -17,8 +19,8 @@ namespace Application.Handlers.Review
 
         public class CreateCommand : IRequest<Result<Unit>>
         {
-            public MovieReview review {  get; set; }
-            public Movie movie { get; set; }
+            public MovieReviewDTO review {  get; set; }
+           
         }
         public class CreateCommandValidator : AbstractValidator<CreateCommand>
         {
@@ -33,24 +35,26 @@ namespace Application.Handlers.Review
         {
             private readonly IMovieReviewRepository _movieReviewRepository;
             private readonly IMovieRepository _movieRepository;
+            private readonly IAccessUser _accessUser;
 
-            public CreateHandler(IMovieReviewRepository movieReviewRepository, IMovieRepository movieRepository)
+            public CreateHandler(IMovieReviewRepository movieReviewRepository, IMovieRepository movieRepository,IAccessUser accessUser)
             {
                 _movieReviewRepository = movieReviewRepository;
                 _movieRepository = movieRepository;
+                _accessUser = accessUser;
             }
 
             public async Task<Result<Unit>> Handle(CreateCommand command, CancellationToken cancellationToken)
             {
-               
-                var movie = await _movieRepository.GetOrCreateMovie(command.movie);
 
-                
+                //var movie = await _movieRepository.GetOrCreateMovie(command.movie);
+
+                var userId = _accessUser.GetUserId();
                 var newReview = new MovieReview
                 {
 
-                    UserId = command.review.UserId, 
-                    imdbId = movie.imdbID, 
+                    UserId = userId, 
+                    imdbID = command.review.imdbID, 
                     Content = command.review.Content,
                     Rating = command.review.Rating,
                     ReviewDate = DateTime.UtcNow,

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTO
+namespace Domain.Return.ReturnType
 {
-    public class TokenDTO
+    public class UpvoteResult
     {
-        public string Token { get; set; }
+        public int UpvoteCount { get; set; }
     }
 }

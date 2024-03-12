@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces.IRepositories;
 using Domain.Models;
+using Domain.Return.DTO;
 using Infrastructure.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,14 +29,24 @@ namespace Infrastructure.Repositories
                     .ToListAsync();
      
         }
-        public async Task<IEnumerable<MovieReview>> GetReviews(string MovieId)
+        public async Task<IEnumerable<MovieReviewDTO>> GetReviews(string MovieId)
         {
-
-            return await _movieContext
-                .movieReviews
-                .Where(x => x.imdbId == MovieId)
+            var reviews = await _movieContext.movieReviews
+                .Include(x => x.User)
+                .Where(x => x.imdbID == MovieId)
+                .Select(review => new MovieReviewDTO
+                {
+                    ReviewId = review.ReviewId,
+                    UserName = review.User.UserName,
+                    imdbID = review.imdbID,
+                    Content = review.Content,
+                    Rating = review.Rating,
+                    ReviewDate = review.ReviewDate,
+                    UpVotes = review.UpvotedByUsers.Count 
+                })
                 .ToListAsync();
 
+            return reviews;
         }
         public async Task<MovieReview> GetReview(int reviewId)
         {

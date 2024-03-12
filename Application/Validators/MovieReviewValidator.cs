@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Return.DTO;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace Application.Validators
 {
-    public class MovieReviewValidator : AbstractValidator<MovieReview>
+    public class MovieReviewValidator : AbstractValidator<MovieReviewDTO>
     {
         public MovieReviewValidator()
         {
             
-            RuleFor(x => x.UserId).NotEmpty().WithMessage("User ID is required.");
+            
 
             
-            RuleFor(x => x.imdbId).NotEmpty().WithMessage("Movie ID is required.");
+            RuleFor(x => x.imdbID).NotEmpty().WithMessage("Movie ID is required.");
 
             
             RuleFor(x => x.Content).NotEmpty().WithMessage("Review content is required.")
                                    .MaximumLength(1000).WithMessage("Review content must be less than 1000 characters.");
 
-            
-            RuleFor(x => x.Rating).InclusiveBetween(1, 5).WithMessage("Rating must be between 1 and 5.");
 
-            
+            RuleFor(x => x.Rating).InclusiveBetween(1.0, 10.0).WithMessage("Rating must be between 1 and 10.");
+
+
             RuleFor(x => x.ReviewDate).LessThanOrEqualTo(DateTime.Now).WithMessage("Review date cannot be in the future.");
 
             

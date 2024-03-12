@@ -15,7 +15,7 @@ namespace Infrastructure.AppDbContext
 
         public DbSet<MovieReview> movieReviews { get; set; }
         public DbSet<Movie> Movies { get; set; }
-
+        public DbSet<MovieReviewUpvote> Upvotes { get; set; }
         public MovieContext(DbContextOptions<MovieContext> options) : base(options)
         {
         }
@@ -34,7 +34,7 @@ namespace Infrastructure.AppDbContext
             modelBuilder.Entity<Movie>()
            .HasMany(m => m.Reviews)
            .WithOne(r => r.Movie)
-           .HasForeignKey(r => r.imdbId);
+           .HasForeignKey(r => r.imdbID);
             modelBuilder.Entity<Movie>()
             .HasKey(m => m.imdbID);
 
@@ -44,6 +44,23 @@ namespace Infrastructure.AppDbContext
 
                 .WithOne(r => r.User)
                 .HasForeignKey(r => r.UserId);
+
+
+            //upvotes
+            modelBuilder.Entity<MovieReviewUpvote>()
+             .HasKey(mru => new { mru.UserId, mru.ReviewId });
+
+            modelBuilder.Entity<MovieReviewUpvote>()
+                .HasOne(mru => mru.User)
+                .WithMany(u => u.UpvotedReviews)
+                .HasForeignKey(mru => mru.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MovieReviewUpvote>()
+                .HasOne(mru => mru.Review)
+                .WithMany(r => r.UpvotedByUsers)
+                .HasForeignKey(mru => mru.ReviewId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

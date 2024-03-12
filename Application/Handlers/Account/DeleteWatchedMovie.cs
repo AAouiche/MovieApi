@@ -30,10 +30,10 @@ namespace Application.Handlers.Account
 
             public async Task<Result<Unit>> Handle(DeleteWatchedMovieCommand request, CancellationToken cancellationToken)
             {
-                var currentUser = await _accessUser.GetUser();
+                var currentUserId = _accessUser.GetUserId();
 
                 
-                await _movieRepository.RemoveWatchedMovie(currentUser, request.MovieId);
+                await _movieRepository.RemoveWatchedMovie(currentUserId, request.MovieId);
 
                 return Result<Unit>.SuccessResult(Unit.Value);
             }

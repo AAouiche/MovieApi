@@ -1,11 +1,15 @@
 ﻿using Application.Handlers.Account;
 using Application.Handlers.Review;
 using Domain.Models;
+using Domain.Return.DTO;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieApi.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/[controller]")]
     public class MovieReviewController : BaseApiController
@@ -20,16 +24,16 @@ namespace MovieApi.Controllers
 
         
         [HttpGet("getReviews/{imdbID}")]
-        public async Task<IActionResult> GetReviews(string MovieId)
+        public async Task<IActionResult> GetReviews(string imdbID)
         {
-            var query = new List.ListQuery { movieReviewId = MovieId };
+            var query = new List.ListQuery { movieReviewId = imdbID };
             var result = await Mediator.Send(query);
             return HandleResults(result); 
         }
 
         
-        [HttpPost("getReview")]
-        public async Task<IActionResult> CreateReview([FromBody] MovieReview review)
+        [HttpPost("createReview")]
+        public async Task<IActionResult> CreateReview([FromBody] MovieReviewDTO review)
         {
             var command = new Create.CreateCommand { review = review };
             var result = await Mediator.Send(command);
@@ -38,7 +42,7 @@ namespace MovieApi.Controllers
 
         
         [HttpPut("updateReview")]
-        public async Task<IActionResult> UpdateReview([FromBody] MovieReview review)
+        public async Task<IActionResult> UpdateReview([FromBody] MovieReviewDTO review)
         {
             var command = new UpdateCommand { MovieReview = review };
             var result = await Mediator.Send(command);
@@ -69,5 +73,13 @@ namespace MovieApi.Controllers
 
             return HandleResults(result);
         }
+        [HttpPost("upvoteReview/{reviewId}")]
+        public async Task<IActionResult> UpvoteReview(int reviewId)
+        {
+            var command = new UpVote.UpvoteCommand { ReviewId = reviewId };
+            var result = await Mediator.Send(command);
+            return HandleResults(result);
+        }
+
     }
 }

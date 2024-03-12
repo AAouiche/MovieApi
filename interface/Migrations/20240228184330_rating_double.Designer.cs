@@ -4,6 +4,7 @@ using Infrastructure.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20240228184330_rating_double")]
+    partial class rating_double
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,21 +196,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("movieReviews");
                 });
 
-            modelBuilder.Entity("Domain.Models.MovieReviewUpvote", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "ReviewId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.ToTable("Upvotes");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -375,25 +363,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Models.MovieReviewUpvote", b =>
-                {
-                    b.HasOne("Domain.Models.MovieReview", "Review")
-                        .WithMany("UpvotedByUsers")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.ApplicationUser", "User")
-                        .WithMany("UpvotedReviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Review");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -448,18 +417,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Reviews");
-
-                    b.Navigation("UpvotedReviews");
                 });
 
             modelBuilder.Entity("Domain.Models.Movie", b =>
                 {
                     b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("Domain.Models.MovieReview", b =>
-                {
-                    b.Navigation("UpvotedByUsers");
                 });
 #pragma warning restore 612, 618
         }

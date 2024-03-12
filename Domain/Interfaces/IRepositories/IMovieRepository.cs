@@ -12,7 +12,7 @@ namespace Domain.Interfaces.IRepositories
 
         Task<Movie> GetOrCreateMovie(Movie movieData);
         Task AddWatched(Movie movie);
-        Task RemoveWatchedMovie(ApplicationUser user, string MovieId);
+        Task RemoveWatchedMovie(string user, string MovieId);
         Task<List<Movie>> ListWatchedMoviesForUser();
 
 

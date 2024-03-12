@@ -74,8 +74,13 @@ namespace Infrastructure.Repositories
 
 
         }
-        public async Task RemoveWatchedMovie(ApplicationUser user, string MovieId)
+        public async Task RemoveWatchedMovie(string userId, string MovieId)
         {
+            
+            var user = await _movieContext.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.WatchedMovies)
+                .FirstOrDefaultAsync();
             var movie = user.WatchedMovies.FirstOrDefault(m => m.imdbID == MovieId);
             if (movie != null)
             {

@@ -1,9 +1,7 @@
-﻿
-using Application.DTO;
-using Application.Handlers.Account;
+﻿using Application.Handlers.Account;
 using Application.Utility;
-using Domain.DTO;
 using Domain.Models;
+using Domain.Return.DTO;
 using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,7 +15,7 @@ using System.Security.Claims;
 
 namespace MovieApi.Controllers
 {
-    
+
     public class AccountController : BaseApiController
     {
         private readonly TokenService _tokenService;

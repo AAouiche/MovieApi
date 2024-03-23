@@ -4,6 +4,7 @@ using Infrastructure.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20240314121851_names")]
+    partial class names
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,6 +61,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -108,44 +114,6 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Models.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PublicId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Domain.Models.Movie", b =>
@@ -399,17 +367,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.Image", b =>
-                {
-                    b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("Image")
-                        .HasForeignKey("Domain.Models.Image", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("Domain.Models.MovieReview", b =>
                 {
                     b.HasOne("Domain.Models.ApplicationUser", "User")
@@ -501,8 +458,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Image");
-
                     b.Navigation("Reviews");
 
                     b.Navigation("UpvotedReviews");

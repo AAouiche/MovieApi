@@ -4,6 +4,7 @@ using Infrastructure.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20240319213327_images")]
+    partial class images
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,6 +61,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -142,8 +148,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Images");
                 });
@@ -402,8 +407,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Image", b =>
                 {
                     b.HasOne("Domain.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("Image")
-                        .HasForeignKey("Domain.Models.Image", "ApplicationUserId")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -501,8 +506,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Image");
-
                     b.Navigation("Reviews");
 
                     b.Navigation("UpvotedReviews");

@@ -15,6 +15,9 @@ using Infrastructure.Security;
 using Domain.Interfaces.Security;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Domain.Interfaces;
+using CloudinaryDotNet;
+using Domain.Return.ReturnType;
 
 namespace Application
 {
@@ -33,8 +36,23 @@ namespace Application
             services.AddScoped<IMovieReviewRepository, MovieReviewRepository>();
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IAccessUser, AccessUser>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<IImageRepository, ImageRepository>();
 
-            
+            var cloudinarySettings = configuration.GetSection("Cloudinary").Get<CloudinarySetting>();
+
+
+            services.AddSingleton<Cloudinary>(serviceProvider =>
+            {
+                var account = new Account(
+                    cloudinarySettings.CloudName,
+                    cloudinarySettings.ApiKey,
+                    cloudinarySettings.ApiSecret
+                );
+                return new Cloudinary(account);
+            });
+
+
             return services;
         }
     }

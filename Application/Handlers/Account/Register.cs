@@ -53,7 +53,10 @@ namespace Application.Handlers.Account
                 {
                     Email = command.RegisterDetails.Email,
                     UserName = command.RegisterDetails.UserName,
-                    ImgUrl = null
+                    Image = null,
+                    FirstName = command.RegisterDetails.FirstName,
+                    LastName = command.RegisterDetails.LastName,
+                    
                 };
 
                 var created = await _userManager.CreateAsync(newUser, command.RegisterDetails.Password);
@@ -68,6 +71,8 @@ namespace Application.Handlers.Account
                 {
                     Email = newUser.Email,
                     UserName = newUser.UserName,
+                    FirstName= newUser.FirstName,
+                    LastName= newUser.LastName,
                     Token = _tokenService.Token(newUser),
                     ImageUrl = null
                 };

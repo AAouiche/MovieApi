@@ -13,6 +13,8 @@ namespace Domain.Return.DTO
         public string Token { get; set; }
         public string? ImageUrl { get; set; }
         public string UserName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public ICollection<MovieReview>? Reviews { get; set; }
         public ICollection<Movie>? WatchedMovies { get; set; }
     }

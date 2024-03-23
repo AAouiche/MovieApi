@@ -51,7 +51,7 @@ namespace Application.Handlers.Account
                     {
                         UserName = user.UserName,
                         Email = user.Email,
-                        ImageUrl = user.ImgUrl,
+                        ImageUrl = user.Image?.Url,
                         Token = _service.Token(user)
                     };
 

@@ -106,5 +106,13 @@ namespace MovieApi.Controllers
                 return HandleResults(result);
             
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPut("updateProfile")]
+        public async Task<ActionResult<UserDTO>> UpdateProfile(UpdateProfileDTO updateProfileDetails)
+        {
+            var command = new UpdateProfile.UpdateProfileCommand { UpdateDetails = updateProfileDetails };
+            return HandleResults(await Mediator.Send(command));
+        }
     }
 }

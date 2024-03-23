@@ -55,7 +55,9 @@ namespace Application.Handlers.Account
                     }
 
                    
-                    var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+                    var user = await _context.Users
+                    .Include(u => u.Image)
+                    .SingleOrDefaultAsync(u => u.Id == userId);
                     if (user == null)
                     {
                         _logger.LogError($"User not found in database for ID: {userId}");
@@ -68,6 +70,9 @@ namespace Application.Handlers.Account
                         Email = user.Email,
                         WatchedMovies = user.WatchedMovies,
                         Reviews = user.Reviews,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        ImageUrl = user.Image?.Url
                     };
 
                     return Result<UserDTO>.SuccessResult(userDto);

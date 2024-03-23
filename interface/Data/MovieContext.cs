@@ -16,6 +16,7 @@ namespace Infrastructure.AppDbContext
         public DbSet<MovieReview> movieReviews { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieReviewUpvote> Upvotes { get; set; }
+        public DbSet<Image> Images { get; set; }
         public MovieContext(DbContextOptions<MovieContext> options) : base(options)
         {
         }

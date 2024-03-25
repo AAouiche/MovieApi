@@ -16,14 +16,14 @@ namespace Application.Handlers.Review
 {
     public class UpdateCommand : IRequest<Result<Unit>>
     {
-        public MovieReviewDTO MovieReview { get; set; }
+        public ReviewUpdateDTO MovieReview { get; set; }
     }
 
     public class UpdateCommandValidator : AbstractValidator<UpdateCommand>
     {
         public UpdateCommandValidator()
         {
-            RuleFor(command => command.MovieReview).SetValidator(new MovieReviewValidator());
+            RuleFor(command => command.MovieReview).SetValidator(new ReviewUpdateDTOValidator());
         }
     }
 
@@ -40,10 +40,16 @@ namespace Application.Handlers.Review
 
         public async Task<Result<Unit>> Handle(UpdateCommand command, CancellationToken cancellationToken)
         {
-            
-            var movieReview = _mapper.Map<MovieReview>(command.MovieReview);
 
-            
+            var movieReview = await _movieReviewRepository.GetReview(command.MovieReview.ReviewId);
+
+            if (movieReview == null)
+            {
+                return Result<Unit>.Failure("Review not found",ErrorCode.BadRequest);
+            }
+
+            movieReview.Content = command.MovieReview.Content;
+            movieReview.Rating = command.MovieReview.Rating;
             await _movieReviewRepository.UpdateReview(movieReview);
             return Result<Unit>.SuccessResult(Unit.Value);
         }

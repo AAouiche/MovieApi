@@ -33,6 +33,7 @@ namespace Infrastructure.Repositories
         {
             var reviews = await _movieContext.movieReviews
                 .Include(x => x.User)
+                .ThenInclude(x => x.Image)
                 .Where(x => x.imdbID == MovieId)
                 .Select(review => new MovieReviewDTO
                 {
@@ -40,6 +41,7 @@ namespace Infrastructure.Repositories
                     UserName = review.User.UserName,
                     imdbID = review.imdbID,
                     Content = review.Content,
+                    ImgUrl = review.User.Image.Url,
                     Rating = review.Rating,
                     ReviewDate = review.ReviewDate,
                     UpVotes = review.UpvotedByUsers.Count 

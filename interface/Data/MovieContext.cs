@@ -61,7 +61,7 @@ namespace Infrastructure.AppDbContext
                 .HasOne(mru => mru.Review)
                 .WithMany(r => r.UpvotedByUsers)
                 .HasForeignKey(mru => mru.ReviewId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

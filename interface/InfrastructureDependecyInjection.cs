@@ -28,9 +28,9 @@ namespace Application
             var assembly = typeof(InfrastructureDependecyInjection).Assembly;
 
             services.AddDbContext<MovieContext>(options =>
-               options.UseSqlServer(
-                  configuration.GetConnectionString("MovieConnectionString"),
-                  x => x.MigrationsAssembly("Infrastructure")));
+                options.UseNpgsql(
+                    configuration.GetConnectionString("MovieConnectionString"),
+                    x => x.MigrationsAssembly("Infrastructure")));
             services.AddScoped<TokenService>();
             services.AddValidatorsFromAssembly(assembly);
             services.AddScoped<IMovieReviewRepository, MovieReviewRepository>();

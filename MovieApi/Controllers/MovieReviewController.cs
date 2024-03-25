@@ -42,7 +42,7 @@ namespace MovieApi.Controllers
 
         
         [HttpPut("updateReview")]
-        public async Task<IActionResult> UpdateReview([FromBody] MovieReviewDTO review)
+        public async Task<IActionResult> UpdateReview([FromBody] ReviewUpdateDTO review)
         {
             var command = new UpdateCommand { MovieReview = review };
             var result = await Mediator.Send(command);

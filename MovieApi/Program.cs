@@ -22,18 +22,13 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("http://localhost:5173", "https://movieproject-production-a068.up.railway.app/")
                .AllowAnyHeader()
-               .AllowAnyMethod();
-               
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 });
-builder.WebHost.ConfigureKestrel(serverOptions => 
-{
-    serverOptions.ListenAnyIP(Environment.GetEnvironmentVariable("PORT") != null ?
-                              int.Parse(Environment.GetEnvironmentVariable("PORT")) :
-                              5000);
-});
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<MovieContext>()

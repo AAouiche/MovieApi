@@ -31,6 +31,11 @@ namespace MovieApi.Controllers
            
             
         }
+        [HttpPost("test")]
+        public IActionResult TestEndpoint()
+        {
+            return Ok("Test endpoint reached");
+        }
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDetails)
         {

@@ -28,7 +28,12 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 });
-
+builder.WebHost.ConfigureKestrel(serverOptions => 
+{
+    serverOptions.ListenAnyIP(Environment.GetEnvironmentVariable("PORT") != null ?
+                              int.Parse(Environment.GetEnvironmentVariable("PORT")) :
+                              5000);
+});
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<MovieContext>()

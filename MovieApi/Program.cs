@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:5173", "https://movieproject-production-a068.up.railway.app/")
+        builder.WithOrigins("http://localhost:5173", "https://movieproject-production-a068.up.railway.app")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();

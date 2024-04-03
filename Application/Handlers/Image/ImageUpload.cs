@@ -5,17 +5,19 @@ using Microsoft.AspNetCore.Http;
 using Domain.Interfaces;
 using Infrastructure.Repositories;
 using Domain.Models;
+using Domain.Return.DTO;
+using CloudinaryDotNet;
 
 namespace Application.Handlers.ImageUpload
 {
     public class ImageUpload
     {
-        public class Command : IRequest<Result<Image>>
+        public class Command : IRequest<Result<ImageReturnDTO>>
         {
 
             public IFormFile ImageFile { get; set; }
         }
-        public class Handler : IRequestHandler<Command, Result<Image>>
+        public class Handler : IRequestHandler<Command, Result<ImageReturnDTO>>
         {
 
             private readonly IImageRepository _imageRepository;
@@ -30,7 +32,7 @@ namespace Application.Handlers.ImageUpload
                 _cloudinaryService = cloudinaryService;
             }
 
-            public async Task<Result<Image>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<ImageReturnDTO>> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 var (imageUrl, PublicId) = await _cloudinaryService.UploadImageAsync(request.ImageFile);
@@ -51,7 +53,7 @@ namespace Application.Handlers.ImageUpload
                 await _imageRepository.CreateAsync(image);
                 var test = await _accessUser.GetUser();
 
-                return Result<Image>.SuccessResult(image);
+                return Result<ImageReturnDTO>.SuccessResult(new ImageReturnDTO { url = image.Url });
             }
         }
     }

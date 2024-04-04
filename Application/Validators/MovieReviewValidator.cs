@@ -27,7 +27,7 @@ namespace Application.Validators
             RuleFor(x => x.Rating).InclusiveBetween(1.0, 10.0).WithMessage("Rating must be between 1 and 10.");
 
 
-            RuleFor(x => x.ReviewDate).LessThanOrEqualTo(DateTime.Now).WithMessage("Review date cannot be in the future.");
+            
 
             
         }

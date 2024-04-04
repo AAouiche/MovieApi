@@ -57,7 +57,7 @@ namespace Application.Handlers.Review
                     imdbID = command.review.imdbID, 
                     Content = command.review.Content,
                     Rating = command.review.Rating,
-                    ReviewDate = DateTime.UtcNow,
+                    ReviewDate = command.review.ReviewDate,
                 };
 
                 

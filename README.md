@@ -5,11 +5,9 @@ The ActivityProject Backend serves as the core server side component of a full s
 Additional Details:
 Security: Incorporates authentication and authorisation strategies to ensure secure access to the application's features.
 
-Real-time Communication: Utilises SignalR hubs for enabling real time interactions.
-
 Image Handling: Offers services for image upload and management.
 
-Persistence: Employs Entity Framework for ORM, facilitating robust and agile data handling.
+Persistence: Employs Entity Framework for ORM.
 
 The backend is designed with a focus on clean architecture, ensuring separation of concerns and making the system easy to maintain and extend. It's currently deployed and running live on Railway along with the front end.
 

@@ -2,7 +2,7 @@
 The ActivityProject Backend serves as the core server side component of a full stack app designed to manage movies and reviews. This RESTful API provides the necessary endpoints for user authentication, review creation, and other interactions.
 
 
-Additional Details:
+
 Security: Incorporates authentication and authorisation strategies to ensure secure access to the application's features.
 
 Image Handling: Offers services for image upload and management.
